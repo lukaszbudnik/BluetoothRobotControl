@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class BluetoothConnectionThread extends Thread {
 
+    public static char EOT = (char) 3;
+
     private static final String TAG = "BluetoothConnection";
 
     private BluetoothDevice peer;
@@ -22,7 +24,7 @@ public class BluetoothConnectionThread extends Thread {
         createSocket();
         while (true) {
             if (socket.isConnected()) {
-                sleep(2);
+                sleep(1);
                 continue;
             }
             try {
@@ -40,13 +42,19 @@ public class BluetoothConnectionThread extends Thread {
     }
 
     public void write(Integer code) throws IOException {
-        if (isConnected()) {
-            String data = code.toString();
-            char EOT = (char) 3;
-            // Get the message bytes and send it
-            byte[] message = (data + EOT).getBytes();
-            socket.getOutputStream().write(message);
-            Log.i(TAG, "Sent => " + data);
+        try {
+            if (isConnected()) {
+                String data = code.toString();
+                // Get the message bytes and send it
+                byte[] message = (data + EOT).getBytes();
+                socket.getOutputStream().write(message);
+                Log.i(TAG, "Sent => " + data);
+            }
+        } catch (IOException e) {
+            // handles broken pipe exceptions, happened to me only once
+            // suspect there was a HC-06 connection issue so adding it just in case
+            cancel();
+            throw e;
         }
     }
 
