@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".BluetoothRobotControl">
+    tools:context=".RobotControlActivity">
 
     <Button
         android:layout_width="wrap_content"
@@ -99,11 +99,24 @@
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:textSize="50px"
         android:id="@+id/rec"
-        android:layout_above="@+id/ne"
-        android:layout_alignRight="@+id/e"
-        android:layout_alignEnd="@+id/e"
-        android:checked="false" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:checked="false"
+        android:textOff="\u25EF"
+        android:textOn="\u25CF"
+        android:background="@color/colorRec"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\uD83D\uDCA1"
+        android:textSize="50px"
+        android:id="@+id/lights"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorLights" />
+
 </RelativeLayout>

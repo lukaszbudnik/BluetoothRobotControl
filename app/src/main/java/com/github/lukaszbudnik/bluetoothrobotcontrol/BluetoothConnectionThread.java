@@ -7,14 +7,14 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class BluetoothConnection extends Thread {
+public class BluetoothConnectionThread extends Thread {
 
     private static final String TAG = "BluetoothConnection";
 
     private BluetoothDevice peer;
     private BluetoothSocket socket;
 
-    public BluetoothConnection(BluetoothDevice peer) {
+    public BluetoothConnectionThread(BluetoothDevice peer) {
             this.peer = peer;
     }
 
@@ -26,11 +26,11 @@ public class BluetoothConnection extends Thread {
                 continue;
             }
             try {
+                // attempt to re-create socket
+                createSocket();
                 socket.connect();
             } catch (IOException e) {
                 Log.e(TAG, "Could not connect to device = " + socket.getRemoteDevice().getName(), e);
-                // attempt to re-create socket
-                createSocket();
             }
         }
     }
@@ -46,12 +46,13 @@ public class BluetoothConnection extends Thread {
             // Get the message bytes and send it
             byte[] message = (data + EOT).getBytes();
             socket.getOutputStream().write(message);
+            Log.i(TAG, "Sent => " + data);
         }
     }
 
     public void cancel() {
         try {
-            if (isConnected()) {
+            if (socket != null) {
                 socket.close();
             }
         } catch (IOException e) {
